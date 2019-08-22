@@ -1,3 +1,10 @@
+/*
+ * @Description: 
+ * @Author: zhongshuai
+ * @Date: 2019-08-21 18:10:43
+ * @LastEditors: zhongshuai
+ * @LastEditTime: 2019-08-22 21:17:21
+ */
 var Mpeg1Muxer, child_process, events, util
 
 child_process = require('child_process')
@@ -21,14 +28,23 @@ Mpeg1Muxer = function(options) {
     }
   }
   this.spawnOptions = [
+    "-rtsp_transport",
+    "tcp",
     "-i",
     this.url,
     '-f',
     'mpegts',
-    '-codec:v',
+    "-an",
+    '-c:v',
     'mpeg1video',
+    "-q",
+    "0",
+    '-r',
+    '50',
+    '-s',
+    '1920x1080',
     // additional ffmpeg options go here
-    ...this.additionalFlags,
+    // ...this.additionalFlags,
     '-'
   ]
   this.stream = child_process.spawn("ffmpeg", this.spawnOptions, {
@@ -36,7 +52,11 @@ Mpeg1Muxer = function(options) {
   })
   this.inputStreamStarted = true
   this.stream.stdout.on('data', (data) => {
-    return this.emit('mpeg1data', data)
+    
+    return this.emit('mpeg1data', {
+      data: data,
+      url: this.url
+    })
   })
   this.stream.stderr.on('data', (data) => {
     return this.emit('ffmpegStderr', data)

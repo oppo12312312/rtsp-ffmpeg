@@ -1,3 +1,10 @@
+/*
+ * @Description: 
+ * @Author: zhongshuai
+ * @Date: 2019-08-21 18:10:43
+ * @LastEditors: zhongshuai
+ * @LastEditTime: 2019-08-22 17:26:48
+ */
 var Mpeg1Muxer, STREAM_MAGIC_BYTES, VideoStream, events, util, ws
 
 ws = require('ws')
@@ -17,6 +24,7 @@ VideoStream = function(options) {
   this.width = options.width
   this.height = options.height
   this.wsPort = options.wsPort
+  this.path = options.path
   this.inputStreamStarted = false
   this.stream = undefined
   this.startMpeg1Stream()
@@ -88,7 +96,9 @@ VideoStream.prototype.startMpeg1Stream = function() {
 
 VideoStream.prototype.pipeStreamToSocketServer = function() {
   this.wsServer = new ws.Server({
-    port: this.wsPort
+    port: this.wsPort,
+    // server: this.server,
+    path: this.path 
   })
   this.wsServer.on("connection", (socket, request) => {
     return this.onSocketConnect(socket, request)
