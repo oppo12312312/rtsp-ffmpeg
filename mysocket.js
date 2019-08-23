@@ -3,7 +3,7 @@
  * @Author: zhongshuai
  * @Date: 2019-08-22 17:36:58
  * @LastEditors: zhongshuai
- * @LastEditTime: 2019-08-23 12:33:33
+ * @LastEditTime: 2019-08-23 13:42:33
  */
 // 导入WebSocket模块:
 const WebSocket = require('ws');
@@ -11,9 +11,13 @@ const WebSocket = require('ws');
 // 引用Server类:
 const WebSocketServer = WebSocket.Server;
 
-
-//用户
-const user = null;
+const express = require('express');
+const path = require('path')
+const app = express()
+app.use(express.static(path.join(__dirname, 'public')))
+app.listen(8082, () => {
+    console.log(`App listening at port 8082`)
+})
 
 //视屏流
 const Mpeg1Muxer = require('./mpeg1muxer')
@@ -21,6 +25,8 @@ const Mpeg1Muxer = require('./mpeg1muxer')
 const mpeg1MuxerMap = {};
 
 let clients = {};
+
+
 
 // 实例化:
 
@@ -55,36 +61,5 @@ wss.on('connection', function (ws) {
 
 });
 
-// const wss1 = new WebSocketServer({
-//     port: 3001
-// });
 
-// let mpeg1Muxer1 = new Mpeg1Muxer({
-//     url: "rtsp://admin:Abc123456@10.231.20.158/cam/realmonitor?channel=1&subtype=0"
-// })
 
-// mpeg1Muxer1.on('ffmpegStderr', function(data) {
-//     console.log(data.toString())
-// })
-// wss1.on('connection', function (ws) {
-//     mpeg1Muxer1.on('mpeg1data', (obj) => {
-//         ws.send(obj.data);
-//     })
-// });
-
-// const wss2 = new WebSocketServer({
-//     port: 3002
-// });
-// let mpeg1Muxer2 = new Mpeg1Muxer({
-//     url: "rtsp://admin:admin@10.231.20.155/1"
-// })
-
-// mpeg1Muxer2.on('ffmpegStderr', function(data) {
-//     console.log(data.toString())
-// })
-
-// wss2.on('connection', function (ws) {
-//     mpeg1Muxer2.on('mpeg1data', (obj) => {
-//         ws.send(obj.data);
-//     })
-// });

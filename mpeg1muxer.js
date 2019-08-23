@@ -3,7 +3,7 @@
  * @Author: zhongshuai
  * @Date: 2019-08-21 18:10:43
  * @LastEditors: zhongshuai
- * @LastEditTime: 2019-08-23 10:30:47
+ * @LastEditTime: 2019-08-23 13:46:56
  */
 var Mpeg1Muxer, child_process, events, util
 
@@ -40,7 +40,7 @@ Mpeg1Muxer = function(options) {
     "-q",
     "0",
     '-r',
-    '20',
+    '50',
     '-s',
     '1920x1080',
     // additional ffmpeg options go here
