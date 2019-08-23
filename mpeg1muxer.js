@@ -3,7 +3,7 @@
  * @Author: zhongshuai
  * @Date: 2019-08-21 18:10:43
  * @LastEditors: zhongshuai
- * @LastEditTime: 2019-08-23 13:46:56
+ * @LastEditTime: 2019-08-23 16:25:42
  */
 var Mpeg1Muxer, child_process, events, util
 
@@ -28,21 +28,12 @@ Mpeg1Muxer = function(options) {
     }
   }
   this.spawnOptions = [
-    "-rtsp_transport",
-    "tcp",
-    "-i",
-    this.url,
-    '-f',
-    'mpegts',
-    "-an",
-    '-c:v',
-    'mpeg1video',
-    "-q",
-    "0",
-    '-r',
-    '50',
-    '-s',
-    '1920x1080',
+    '-buffer_size', 2097152,
+    '-max_delay', 0,
+    '-i', this.url,
+    '-c:v', 'copy',
+    '-an',
+    '-f', 'flv',
     // additional ffmpeg options go here
     // ...this.additionalFlags,
     '-'

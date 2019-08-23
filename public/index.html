@@ -1,117 +1,51 @@
 <!--
  * @Description: 
  * @Author: zhongshuai
- * @Date: 2019-05-28 07:22:26
+ * @Date: 2019-08-23 13:56:02
  * @LastEditors: zhongshuai
- * @LastEditTime: 2019-08-23 13:46:15
+ * @LastEditTime: 2019-08-23 16:25:34
  -->
 <!DOCTYPE html>
 <html>
+
 <head>
-	<title>JSMpeg Stream Client</title>
-	<style type="text/css">
-		html, body {
-			background-color: #111;
-			text-align: center;
-		}
-	</style>
-	
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <title>flv.js demo</title>
+    <link rel="stylesheet" type="text/css" href="./demo.css" />
+    <script src="./flv.js"></script>
 </head>
-<style>
-.canvas{
-	width: 960px;
-	height: 540px;
-}
-.content{
-	display: flex;
-}
-/* .fx1{
-	flex: 1;
-} */
-</style>
+
 <body>
-	<div class="content">
-			<div class="fx1">
-					<canvas id="video-canvas1" class="canvas" height="1080" height="1920" ></canvas>
-					<canvas id="video-canvas2" class="canvas" height="1080" height="1920" ></canvas>
-			</div>
-			<div class="fx1">
-					<canvas id="video-canvas3" class="canvas" height="1080" height="1920" ></canvas>
-					<canvas id="video-canvas4" class="canvas" height="1080" height="1920" ></canvas>
-			</div>
-	</div>
+    
+    <video id="videoElement" name="videoElement" class="centeredVideo" controls autoplay>
+        Your browser is too old which doesn't support HTML5 video.
+    </video>
 
-	<script type="text/javascript" src="jsmpeg.min.js"></script>
-	<script type="text/javascript">
-			// var url156 = 'ws://localhost:9999/156';
-			// let canvas = document.getElementById('video-canvas'+1);
-			// new JSMpeg.Player(url156, {canvas: canvas});
-
-			// var url78 = 'ws://localhost:9999/78';
-			// let canvas2 = document.getElementById('video-canvas'+2);
-			// new JSMpeg.Player(url78, {canvas: canvas2});
-
-			// var url155 = 'ws://localhost:9999/155';
-			// let canvas3 = document.getElementById('video-canvas'+3);
-			// new JSMpeg.Player(url155, {canvas: canvas3});
-
-			// var url77 = 'ws://localhost:9999/77';
-			// let canvas4 = document.getElementById('video-canvas'+4);
-			// new JSMpeg.Player(url158, {canvas: canvas4});
-		//  }
-		// var ws = new WebSocket("ws://localhost:3000");
-                
-		// ws.onopen = function()
-		// {
-		// 	// Web Socket 已连接上，使用 send() 方法发送数据
-		// 	ws.send({
-		// 	username:"zhongshuai",
-		// 	userid:23
-
-		// 	});
-		// 	alert("数据发送中...");
-		// };
-			
-		// ws.onmessage = function (evt) 
-		// { 
-		// 	var received_msg = evt.data;
-		// 	alert("数据已接收...");
-		// };
-			
-		// ws.onclose = function()
-		// { 
-		// 	// 关闭 websocket
-		// 	alert("连接已关闭..."); 
-		// };
-		var urls = [
-			"rtsp://admin:Abc123456@10.231.20.158/cam/realmonitor?channel=1&subtype=0",
-			"rtsp://admin:admin@10.231.20.77",
+ 
+    
+    <script>
+        var urls = [
+			// "rtsp://admin:Abc123456@10.231.20.158/cam/realmonitor?channel=1&subtype=0",
+			// "rtsp://admin:admin@10.231.20.77",
 			"rtsp://admin:admin@10.231.20.156/1",
-			"rtsp://admin:admin@10.231.20.155/1"
-		]
-		var jsmpegs = {};
-		// var wsUrl = 'ws://10.231.50.30:3000';
-		// var wsUrl = 'ws://10.231.20.64:3000';
-		var wsUrl = 'ws://127.0.0.1:3000';
-		for(let i = 0; i< urls.length; i++){
-			let canvas = document.getElementById('video-canvas'+(i+1));
-			var jsmpeg = new JSMpeg.Player(wsUrl, {canvas: canvas});
-			jsmpegs[urls[i]] = jsmpeg;
-			setTimeout(function(){
-				for(let i = 0; i< urls.length; i++){
-					jsmpegs[urls[i]].source.socket.send(urls[i]);
-				}
-			},1000+i)
-		}
+			// "rtsp://admin:admin@10.231.20.155/1"
+        ]
+        if (flvjs.isSupported()) {
+            debugger
+            var player = document.getElementById('videoElement');
+            var flvPlayer = flvjs.createPlayer({
+                type: 'flv',
+                isLive: true,
+                url: "ws://localhost:3000"
+            })
+            flvPlayer.attachMediaElement(videoElement);
+            flvPlayer.load(); //加载
+            flvPlayer.play();
+            console.log(flvPlayer) 
+        }
 
-
-		// let canvas1 = document.getElementById('video-canvas1');
-		// var jsmpeg = new JSMpeg.Player('ws://127.0.0.1:3001', {canvas: canvas1});
-
-		// // let canvas2 = document.getElementById('video-canvas2');
-		// // var jsmpeg = new JSMpeg.Player('ws://127.0.0.1:3002', {canvas: canvas2});
-
-			
-	</script>
+    </script>
+    
 </body>
+
 </html>
