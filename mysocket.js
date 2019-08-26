@@ -3,7 +3,7 @@
  * @Author: zhongshuai
  * @Date: 2019-08-22 17:36:58
  * @LastEditors: zhongshuai
- * @LastEditTime: 2019-08-26 14:00:09
+ * @LastEditTime: 2019-08-26 14:41:17
  */
 // 导入WebSocket模块:
 var _  = require('lodash');
@@ -17,14 +17,12 @@ const express = require('express');
 const path = require('path')
 const app = express()
 app.use(express.static(path.join(__dirname, 'public')))
-app.listen(8082, () => {
+app.listen(8888, () => {
     console.log(`App listening at port 8082`)
 })
 
 //视屏流
 const Mpeg1Muxer = require('./mpeg1muxer')
-
-
 
 // 实例化:
 
