@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "prepublish": "npm run test",
+    "dev": "node mysocket.js",
     "test": "mocha test/*.js"
   },
   "repository": {
@@ -19,6 +20,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "flv.js": "^1.5.0",
+    "lodash": "^4.17.15",
     "socket.io": "^2.2.0",
     "ws": "^7.0.0"
   }

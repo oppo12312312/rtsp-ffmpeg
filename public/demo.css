@@ -106,3 +106,12 @@
 .hidden {
     display: none;
 }
+.canvas{
+	width: 960px;
+	height: 540px;
+}
+.content{
+    height: 468px;
+	display: flex;
+}
+

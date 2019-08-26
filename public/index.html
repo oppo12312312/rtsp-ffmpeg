@@ -3,7 +3,7 @@
  * @Author: zhongshuai
  * @Date: 2019-08-23 13:56:02
  * @LastEditors: zhongshuai
- * @LastEditTime: 2019-08-23 16:25:34
+ * @LastEditTime: 2019-08-26 14:34:40
  -->
 <!DOCTYPE html>
 <html>
@@ -16,33 +16,71 @@
 </head>
 
 <body>
-    
-    <video id="videoElement" name="videoElement" class="centeredVideo" controls autoplay>
-        Your browser is too old which doesn't support HTML5 video.
-    </video>
+    <div class="content">
+        <div class="fx1">
+                <video id="videoElement1" name="videoElement" class="centeredVideo" muted autoplay>
+                        Your browser is too old which doesn't support HTML5 video.
+                    </video>
+                    <video id="videoElement2" name="videoElement" class="centeredVideo" muted autoplay>
+                            Your browser is too old which doesn't support HTML5 video.
+                        </video>
+            </div>
+            <div class="fx1">
+                    <video id="videoElement3" name="videoElement" class="centeredVideo" muted autoplay>
+                            Your browser is too old which doesn't support HTML5 video.
+                        </video>
+                        <video id="videoElement4" name="videoElement" class="centeredVideo" muted autoplay>
+                                Your browser is too old which doesn't support HTML5 video.
+                        </video>
+                </div>
+   </div>
+            
+  
 
  
     
     <script>
         var urls = [
-			// "rtsp://admin:Abc123456@10.231.20.158/cam/realmonitor?channel=1&subtype=0",
-			// "rtsp://admin:admin@10.231.20.77",
+			"rtsp://admin:Abc123456@10.231.20.158/cam/realmonitor?channel=1&subtype=0",
+			"rtsp://admin:admin@10.231.20.77",
 			"rtsp://admin:admin@10.231.20.156/1",
-			// "rtsp://admin:admin@10.231.20.155/1"
+			"rtsp://admin:admin@10.231.20.155/1"
         ]
-        if (flvjs.isSupported()) {
-            debugger
-            var player = document.getElementById('videoElement');
-            var flvPlayer = flvjs.createPlayer({
-                type: 'flv',
-                isLive: true,
-                url: "ws://localhost:3000"
-            })
-            flvPlayer.attachMediaElement(videoElement);
-            flvPlayer.load(); //加载
-            flvPlayer.play();
-            console.log(flvPlayer) 
+        for(let i = 0; i < urls.length; i++){
+            if (flvjs.isSupported()) {
+                let player = document.getElementById('videoElement'+(i+1));
+                let flvPlayer = flvjs.createPlayer({
+                    type: 'flv',
+                    duration: 0,
+                    isLive: true,
+                    url: "ws://localhost:3000?url="+escape(urls[i])
+                },{
+                    enableStashBuffer: false,
+                    lazyLoad: false,
+                    lazyLoadMaxDuration: 0,
+                    lazyLoadRecoverDuration: 0,
+                    deferLoadAfterSourceOpen: false,
+                })
+                flvPlayer.attachMediaElement(player);
+                flvPlayer.load(); //加载
+                flvPlayer.play();
+            }
         }
+        document.addEventListener('visibilitychange',function(){ 
+            for(let i = 0; i < urls.length; i++){
+                let video = document.getElementById('videoElement'+(i+1));
+                let buffered = video.buffered
+                if (buffered.length > 0) {
+                let end = buffered.end(0)
+                if (end - video.currentTime > 0.15) {
+                    video.currentTime = end - 0.1
+                }
+                }
+            }
+        })
+
+
+
 
     </script>
     
