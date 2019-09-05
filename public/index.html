@@ -3,7 +3,7 @@
  * @Author: zhongshuai
  * @Date: 2019-08-23 13:56:02
  * @LastEditors: zhongshuai
- * @LastEditTime: 2019-08-30 17:51:01
+ * @LastEditTime: 2019-09-05 16:22:06
  -->
 <!DOCTYPE html>
 <html>
@@ -41,19 +41,22 @@
     
     <script>
         var urls = [
-			"rtsp://admin:Abc123456@10.231.20.158/cam/realmonitor?channel=1&subtype=0",
-			"rtsp://10.231.20.223/user=admin&password=&channel=1&stream=0.sdp?",
-			"rtsp://admin:admin@10.231.20.156/1",
-			"rtsp://admin:admin@10.231.20.155/1"
+			// "rtsp://admin:Abc123456@10.231.20.158/cam/realmonitor?channel=1&subtype=0",
+			// "rtsp://10.231.20.223/user=admin&password=&channel=1&stream=0.sdp?",
+			// "rtsp://admin:admin@10.231.20.156/1",
+			"rtsp://admin:admin@10.231.20.155/1",
+			// "rtsp://admin:admin@10.231.20.155/1"
         ]
+        var flvPlayer;
+
         for(let i = 0; i < urls.length; i++){ 
             if (flvjs.isSupported()) {
                 let player = document.getElementById('videoElement'+(i+1));
-                let flvPlayer = flvjs.createPlayer({
+                flvPlayer = flvjs.createPlayer({
                     type: 'flv',
                     duration: 0,
                     isLive: true,
-                    url: "ws://127.0.0.1/cameraStream?url="+escape(urls[i])
+                    url: "ws://127.0.0.1:3000/cameraStream?url="+escape(urls[i])
                 },{
                     enableStashBuffer: false,
                     lazyLoad: false,
@@ -61,7 +64,14 @@
                     lazyLoadRecoverDuration: 0,
                     deferLoadAfterSourceOpen: false,
                 })
-                flvPlayer.attachMediaElement(player);
+				flvPlayer.attachMediaElement(player);
+				flvPlayer.on(flvjs.Events.METADATA_ARRIVED,function(data){
+					console.log(data)
+				})
+				flvPlayer.on(flvjs.Events.SCRIPTDATA_ARRIVED,function(data){
+                    console.log(data)
+
+				})
                 flvPlayer.load(); //加载
                 flvPlayer.play();
             }

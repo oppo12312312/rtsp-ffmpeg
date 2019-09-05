@@ -3,7 +3,7 @@
  * @Author: zhongshuai
  * @Date: 2019-08-28 17:11:44
  * @LastEditors: zhongshuai
- * @LastEditTime: 2019-08-28 18:51:26
+ * @LastEditTime: 2019-09-05 16:15:25
  */
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.flvjs = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
 (function (process,global){
@@ -3583,7 +3583,9 @@ var TransmuxingController = function () {
 
             var probeData = null;
             var consumed = 0;
-
+            if(data.byteLength === 324){
+                byteStart = 0;
+            }
             if (byteStart > 0) {
                 // IOController seeked immediately after opened, byteStart > 0 callback may received
                 this._demuxer.bindDataSource(this._ioctl);
@@ -3780,7 +3782,6 @@ var TransmuxingController = function () {
         key: '_reportStatisticsInfo',
         value: function _reportStatisticsInfo() {
             var info = {};
-            console.log(this._ioctl.currentURL);
             info.url = this._ioctl.currentURL;
             info.hasRedirect = this._ioctl.hasRedirect;
             if (info.hasRedirect) {
@@ -4724,6 +4725,13 @@ var FLVDemuxer = function () {
             var offset = 0;
             var le = this._littleEndian;
 
+            if(chunk.byteLength === 324){
+                debugger
+                byteStart = 0
+                this._stashByteStart = 0;
+                this._firstParse = true;
+            }
+
             if (byteStart === 0) {
                 // buffer with FLV header
                 if (chunk.byteLength > 13) {
@@ -4761,7 +4769,7 @@ var FLVDemuxer = function () {
 
                 var tagType = _v.getUint8(0);
                 var dataSize = _v.getUint32(0, !le) & 0x00FFFFFF;
-
+                
                 if (offset + 11 + dataSize + 4 > chunk.byteLength) {
                     // data not enough for parsing actual data body
                     break;
@@ -6936,6 +6944,10 @@ var IOController = function () {
                     var _stashArray = new Uint8Array(this._stashBuffer, 0, this._bufferSize);
                     _stashArray.set(new Uint8Array(chunk), this._stashUsed);
                     this._stashUsed += chunk.byteLength;
+                    if(this._stashBuffer.byteLength === 324){
+                        debugger
+                        this._stashByteStart = 0;
+                    }
                     var _consumed = this._dispatchChunks(this._stashBuffer.slice(0, this._stashUsed), this._stashByteStart);
                     if (_consumed < this._stashUsed && _consumed > 0) {
                         // unconsumed data remain
@@ -6944,6 +6956,10 @@ var IOController = function () {
                     }
                     this._stashUsed -= _consumed;
                     this._stashByteStart += _consumed;
+                    if(this._stashBuffer.byteLength === 324){
+                        debugger
+                        this._stashByteStart = 0;
+                    }
                 }
             } else {
                 // enable stash
@@ -7807,6 +7823,11 @@ var WebSocketLoader = function (_BaseLoader) {
             this._receivedLength += chunk.byteLength;
 
             if (this._onDataArrival) {
+                if(chunk.byteLength === 324){
+                    debugger
+                    var byteStart = 0;
+                    this._receivedLength = chunk.byteLength;
+                }
                 this._onDataArrival(chunk, byteStart, this._receivedLength);
             }
         }

@@ -3,7 +3,7 @@
  * @Author: zhongshuai
  * @Date: 2019-08-21 18:10:43
  * @LastEditors: zhongshuai
- * @LastEditTime: 2019-08-29 15:32:19
+ * @LastEditTime: 2019-09-04 17:29:05
  */
 var Mpeg1Muxer, child_process, events, util
 
@@ -42,11 +42,13 @@ Mpeg1Muxer = function(options) {
     detached: false
   })
   this.inputStreamStarted = true
+  this.state = true;
   this.stream.stdout.on('data', (data) => {
     
     return this.emit('mpeg1data', {
       data: data,
-      url: this.url
+      url: this.url,
+      state: this.state
     })
   })
   this.stream.stderr.on('data', (data) => {
@@ -65,3 +67,4 @@ Mpeg1Muxer = function(options) {
 util.inherits(Mpeg1Muxer, events.EventEmitter)
 
 module.exports = Mpeg1Muxer
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
